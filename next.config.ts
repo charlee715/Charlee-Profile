@@ -1,8 +1,10 @@
 import type { NextConfig } from "next";
 
 const isGitHubPages = process.env.GITHUB_PAGES === "true";
-const repositoryName = process.env.GITHUB_REPOSITORY?.split("/").at(-1) ?? "Charlee-Profile";
-const pagesBasePath = isGitHubPages ? `/${repositoryName}` : "";
+const [repositoryOwner = "charlee715", repositoryName = "Charlee-Profile"] =
+  (process.env.GITHUB_REPOSITORY ?? "charlee715/Charlee-Profile").split("/");
+const isUserSite = repositoryName.toLowerCase() === `${repositoryOwner}.github.io`.toLowerCase();
+const pagesBasePath = isGitHubPages && !isUserSite ? `/${repositoryName}` : "";
 
 const nextConfig: NextConfig = {
   output: isGitHubPages ? "export" : undefined,
