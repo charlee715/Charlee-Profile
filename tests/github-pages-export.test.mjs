@@ -9,10 +9,17 @@ test("exports the profile under the repository base path", async () => {
   assert.match(html, /Charlee/i);
   assert.match(html, /\/Charlee-Profile\/_next\//);
   assert.match(html, /\/Charlee-Profile\/favicon\.svg/);
+
+  const localAssets = [...html.matchAll(/(?:href|src)="(\/Charlee-Profile\/[^"?#]+)"/g)]
+    .map(([, pathname]) => decodeURIComponent(pathname.replace("/Charlee-Profile/", "")));
+
+  assert.ok(localAssets.length > 0);
+  await Promise.all(localAssets.map((pathname) => access(new URL(pathname, output))));
 });
 
 test("copies public assets and disables Jekyll processing", async () => {
   await access(new URL(".nojekyll", output));
+  await access(new URL("_next/static/", output));
   await access(new URL("images/contact-background-charlee-final.png", output));
   await access(new URL("music/Exploration%20Theme.wav", output));
 
