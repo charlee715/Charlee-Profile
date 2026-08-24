@@ -2,10 +2,13 @@ import { access, cp, readFile, writeFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import { spawnSync } from "node:child_process";
 
-const repositoryName = process.env.GITHUB_REPOSITORY?.split("/").at(-1) ?? "Charlee-Profile";
+const [repositoryOwner = "charlee715", repositoryName = "Charlee-Profile"] =
+  (process.env.GITHUB_REPOSITORY ?? "charlee715/Charlee-Profile").split("/");
+const isUserSite = repositoryName.toLowerCase() === `${repositoryOwner}.github.io`.toLowerCase();
+const pagesBasePath = isUserSite ? "" : `/${repositoryName}`;
 
 process.env.GITHUB_PAGES = "true";
-process.env.NEXT_PUBLIC_BASE_PATH = `/${repositoryName}`;
+process.env.NEXT_PUBLIC_BASE_PATH = pagesBasePath;
 
 const playlistPath = resolve(process.cwd(), "public", "music", "playlist.json");
 const sourcePlaylist = await readFile(playlistPath, "utf8").catch(() => null);
