@@ -1,0 +1,68 @@
+.section { position: relative; height: 100svh; overflow: hidden; padding: 0 var(--page-x) 3rem; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); grid-template-rows: auto auto minmax(0, 1fr); column-gap: 1.35vw; }
+.rule { grid-column: 1 / -1; height: 1px; background: var(--line); transform-origin: left center; }
+.header { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 1.35vw; align-items: start; padding: 1.1rem 0 9vh; }
+.header h2 { grid-column: 1 / -1; margin: 0; font-size: clamp(4rem, 10.5vw, 12.75rem); line-height: 0.84; letter-spacing: -0.065em; font-weight: 700; }
+.publicationsSection { background: #050505; color: #f7f7f3; padding-bottom: clamp(10rem, 20vh, 14rem); }
+.publicationsSection .rule, .publicationsSection .row { border-color: rgba(247, 247, 243, 0.28); }
+.publicationsSection .rule { background: rgba(247, 247, 243, 0.45); }
+.awardsSection { isolation: isolate; grid-template-rows: auto minmax(0, 1fr); background: #fff; }
+.awardsSection > .rule { position: relative; z-index: 2; }
+.awardsBody { position: relative; z-index: 1; grid-column: 1 / -1; min-height: 0; display: grid; grid-template-columns: minmax(0, 37.4%) minmax(0, 60.2%); column-gap: 2.4%; align-items: center; }
+.awardsList { grid-column: 2; align-self: center; }
+.awardsRow { grid-template-columns: 4rem minmax(0, 1fr); padding: clamp(1.25rem, 2.2vh, 1.8rem) 0; }
+.awardsRow .rowTitle { font-size: clamp(1.5rem, 2.45vw, 2.95rem); }
+.interactiveTitle { position: relative; grid-column: 1 / -1; width: 100%; }
+.titleCanvas { display: block; width: 100%; height: clamp(5rem, 11.2vw, 13.5rem); cursor: default; touch-action: pan-y; }
+.srOnly { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+.lead { grid-column: 3 / -1; align-self: start; max-width: 13ch; margin: 0; font-size: clamp(2.7rem, 5.8vw, 7rem); line-height: 0.94; letter-spacing: -0.055em; font-weight: 500; }
+.meta { grid-column: 1 / 3; align-self: end; display: flex; flex-direction: column; gap: 0.6rem; font-size: 0.78rem; line-height: 1.3; letter-spacing: 0.04em; text-transform: uppercase; }
+.list { grid-column: 3 / -1; align-self: start; }
+.scrollList { align-self: start; width: 100%; max-height: min(100%, var(--five-item-height)); overflow-x: hidden; overflow-y: auto; overscroll-behavior-y: contain; scrollbar-width: thin; scrollbar-color: rgba(18, 18, 18, 0.55) transparent; padding-right: clamp(0.35rem, 0.8vw, 0.85rem); }
+.scrollList:focus-visible { outline: 1px solid currentColor; outline-offset: 4px; }
+.scrollList::-webkit-scrollbar { width: 5px; }
+.scrollList::-webkit-scrollbar-track { background: transparent; }
+.scrollList::-webkit-scrollbar-thumb { background: rgba(18, 18, 18, 0.55); border-radius: 999px; }
+.publicationsSection .scrollList { scrollbar-color: rgba(247, 247, 243, 0.55) transparent; }
+.publicationsSection .scrollList::-webkit-scrollbar-thumb { background: rgba(247, 247, 243, 0.55); }
+.row { position: relative; display: grid; grid-template-columns: 4rem minmax(0, 1fr) minmax(11rem, 0.34fr) 1.5rem; gap: 1rem; align-items: start; padding: 1.4rem 0 1.55rem; border-top: 1px solid var(--line); transition: transform 220ms ease; }
+.row:last-child { border-bottom: 1px solid var(--line); }
+a.row:hover { transform: translateX(6px); }
+.rowIndex, .rowMeta { font-size: 0.77rem; line-height: 1.35; text-transform: uppercase; letter-spacing: 0.04em; }
+.rowTitle { min-width: 0; overflow: hidden; white-space: nowrap; font-size: clamp(1.25rem, 2.15vw, 2.6rem); line-height: 1.14; letter-spacing: -0.035em; padding-block: 0.08em 0.14em; margin-block: -0.08em -0.14em; }
+.rowTitleTrack { display: inline-block; width: max-content; will-change: transform; }
+.rowTitleWord { display: inline-block; will-change: opacity, filter, transform; }
+.publicationsSection .row { color: inherit; transition: transform 300ms ease, opacity 300ms ease, filter 300ms ease; }
+.publicationsSection .list:hover .row:not(:hover) { opacity: 0.28; filter: blur(0.7px); }
+.publicationsSection .row:hover .rowTitleWord { opacity: 1 !important; filter: blur(0) !important; transform: translateY(0) !important; }
+.publicationsSection .rowMeta, .publicationsSection .rowIndex { opacity: 0.62; transition: opacity 300ms ease; }
+.publicationsSection .row:hover .rowMeta, .publicationsSection .row:hover .rowIndex { opacity: 1; }
+.awardsSection .row { transition: transform 300ms ease, opacity 300ms ease, filter 300ms ease; }
+.awardsSection .list:hover .row:not(:hover) { opacity: 0.28; filter: blur(0.7px); }
+.awardsSection .row:hover { transform: translateX(6px); }
+.awardsSection .row:hover .rowTitleWord { opacity: 1 !important; filter: blur(0) !important; transform: translateY(0) !important; }
+.awardsSection .rowMeta, .awardsSection .rowIndex { opacity: 0.62; transition: opacity 300ms ease; }
+.awardsSection .row:hover .rowMeta, .awardsSection .row:hover .rowIndex { opacity: 1; }
+.arrow { justify-self: end; font-size: 1.25rem; transform: translate(-5px, 5px); opacity: 0; transition: 220ms ease; }
+a.row:hover .arrow { opacity: 1; transform: translate(0, 0); }
+.awardsBody > .awardsList { align-self: center; }
+.awardsBody > .awardsList { grid-column: 2; width: 100%; }
+.awardsBody .awardsRow { grid-template-columns: 3.5rem minmax(0, 1fr) minmax(9rem, 0.3fr); padding: clamp(1.25rem, 2.2vh, 1.8rem) 0; }
+.awardsBody .awardsRow .rowMeta { display: block; }
+.awardsBody .awardsRow .rowTitle { font-size: clamp(1.5rem, 2.45vw, 2.95rem); }
+@media (max-width: 767px) {
+  .section { height: 100svh; grid-template-columns: repeat(4, minmax(0, 1fr)); padding-bottom: 2rem; }
+  .header { grid-template-columns: repeat(4, minmax(0, 1fr)); padding-bottom: 4rem; }
+  .header h2 { grid-column: 1 / -1; font-size: 14vw; }
+  .lead, .list { grid-column: 1 / -1; }
+  .lead { font-size: 12vw; margin-bottom: 6rem; }
+  .meta { grid-column: 1 / -1; margin-bottom: 4rem; }
+  .row { grid-template-columns: 2.2rem 1fr auto; }
+  .rowMeta { grid-column: 2 / -1; color: var(--muted); }
+  .arrow { grid-column: 3; grid-row: 1; }
+  .publicationsSection { padding-bottom: 9.5rem; }
+  .awardsBody { grid-template-columns: repeat(4, minmax(0, 1fr)); align-content: center; row-gap: 2.5rem; }
+  .awardsBody > .awardsList { grid-column: 1 / -1; width: 100%; }
+  .awardsBody .awardsRow { grid-template-columns: 2.2rem minmax(0, 1fr); padding: 1rem 0; }
+  .awardsBody .awardsRow .rowMeta { grid-column: 2 / -1; }
+  .awardsBody .awardsRow .rowTitle { font-size: clamp(1.25rem, 6vw, 1.8rem); }
+}

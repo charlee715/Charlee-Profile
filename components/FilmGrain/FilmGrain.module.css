@@ -1,0 +1,38 @@
+.grain {
+  position: absolute;
+  z-index: 1;
+  top: -100%;
+  left: -100%;
+  width: 300%;
+  height: 300%;
+  background-repeat: repeat;
+  opacity: 0.35;
+  pointer-events: none;
+  will-change: transform;
+  animation: grainShift 0.5s steps(20, end) infinite;
+}
+
+@keyframes grainShift {
+  0%, 100% { transform: translate(-10%, 10%); }
+  10% { transform: translate(-25%, 0%); }
+  20% { transform: translate(-30%, 10%); }
+  30% { transform: translate(-30%, 30%); }
+  40% { transform: translate(-20%, 20%); }
+  50% { transform: translate(-15%, 10%); }
+  60% { transform: translate(-20%, 20%); }
+  70% { transform: translate(-5%, 20%); }
+  80% { transform: translate(-25%, 5%); }
+  90% { transform: translate(-30%, 25%); }
+}
+
+@media (max-width: 991px) {
+  .grain { opacity: 0.15; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .grain {
+    animation: none;
+    transform: translate(-10%, 10%);
+    will-change: auto;
+  }
+}

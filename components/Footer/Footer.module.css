@@ -1,0 +1,112 @@
+.footer {
+  position: relative;
+  isolation: isolate;
+  height: 100svh;
+  overflow: hidden;
+  background: #080808;
+  font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+}
+
+.contact {
+  position: absolute;
+  z-index: 2;
+  top: clamp(5.5rem, 12.5vh, 8.5rem);
+  left: clamp(2rem, 8.1vw, 10rem);
+  color: #fff;
+  mix-blend-mode: difference;
+  font-size: clamp(2rem, 2.35vw, 3.25rem);
+  line-height: 1.08;
+  letter-spacing: 0.018em;
+  font-weight: 650;
+}
+
+.identity {
+  margin: 0 0 0.62em;
+  overflow: hidden;
+  cursor: default;
+}
+
+.identity span {
+  display: inline-block;
+  transition: opacity 220ms ease, transform 220ms ease;
+}
+
+.identity:hover span {
+  opacity: 0.62;
+  transform: translateX(0.12em);
+}
+
+.links {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.54em;
+}
+
+.links a,
+.links span {
+  display: block;
+  color: inherit;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.links a {
+  transition: opacity 220ms ease, transform 220ms ease;
+}
+
+.links a:hover,
+.links a:focus-visible {
+  opacity: 0.62;
+  transform: translateX(0.12em);
+}
+
+.links a:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 0.12em;
+}
+
+.links span[aria-disabled="true"] {
+  cursor: default;
+}
+
+.links a:last-child {
+  margin-top: 0.12em;
+  max-width: min(15em, 78vw);
+  white-space: normal;
+  line-height: 1.04;
+}
+
+.contactLabel {
+  position: absolute;
+  z-index: 2;
+  right: clamp(1rem, 2.5vw, 4rem);
+  bottom: clamp(2rem, 3.2vh, 4rem);
+  color: #fff;
+  mix-blend-mode: difference;
+  font-size: clamp(5rem, 11.8vw, 14rem);
+  line-height: 0.72;
+  letter-spacing: 0.012em;
+  font-weight: 700;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+@media (max-width: 767px) {
+  .contact {
+    top: 12vh;
+    left: var(--page-x);
+    font-size: clamp(1.85rem, 8.6vw, 3rem);
+  }
+
+  .contactLabel {
+    right: 4.5rem;
+    bottom: 2rem;
+    font-size: 18vw;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .links a,
+  .identity span { transition: none; }
+}

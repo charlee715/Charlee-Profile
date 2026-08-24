@@ -1,0 +1,13 @@
+.heroStage { height: 400svh; position: relative; }
+.hero { height: 100svh; overflow: visible; position: sticky; top: 0; isolation: isolate; padding: 0 var(--page-x); background-color: #e5e5e3; background-image: linear-gradient(#e5e5e3, #e5e5e3), url("/xuan-paper-texture.png"); background-repeat: repeat; background-size: auto, 760px 760px; background-blend-mode: color, normal; }
+.eyebrow { position: absolute; z-index: 2; top: 2vh; left: 50%; transform: translateX(-50%); font-size: clamp(1rem, 1.3vw, 2.125rem); line-height: 1; font-weight: 400; letter-spacing: -0.035em; white-space: nowrap; cursor: pointer; }
+.nameClip { position: absolute; top: 12vh; left: var(--page-x); right: var(--page-x); overflow: visible; }
+.name { margin: 0; font-size: clamp(11rem, 24vw, 30rem); line-height: 0.82; letter-spacing: -0.064em; font-weight: 700; white-space: nowrap; transform-origin: left bottom; }
+.statement { position: absolute; top: 60.3vh; left: 0; width: max-content; margin: 0; font-size: clamp(8rem, 16.2vw, 19.5rem); line-height: 0.88; letter-spacing: -0.07em; font-weight: 500; white-space: nowrap; transform: scaleX(0.86); transform-origin: left top; }
+@media (max-width: 767px) {
+  .hero { min-height: 92svh; }
+  .eyebrow { top: 2rem; font-size: 0.95rem; }
+  .nameClip { top: 19vh; }
+  .name { font-size: 23.5vw; line-height: 0.88; }
+  .statement { top: 45vh; left: var(--page-x); width: calc(100% - 3rem); font-size: 18vw; line-height: 0.91; }
+}
