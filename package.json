@@ -8,11 +8,13 @@
   "scripts": {
     "dev": "node scripts/generate-music-manifest.mjs && vinext dev",
     "build": "node scripts/generate-music-manifest.mjs && vinext build",
+    "build:pages": "node scripts/build-github-pages.mjs",
     "start": "vinext start",
     "test": "npm run build && node --test tests/rendered-html.test.mjs",
     "lint": "eslint . --ignore-pattern dist --ignore-pattern .next",
     "typecheck": "tsc --noEmit --pretty false",
-    "check": "npm run lint && npm run typecheck && npm test"
+    "check": "npm run lint && npm run typecheck && npm test",
+    "check:pages": "npm run build:pages && node --test tests/github-pages-export.test.mjs"
   },
   "dependencies": {
     "gsap": "3.13.0",

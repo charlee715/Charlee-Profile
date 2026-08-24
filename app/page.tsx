@@ -4,6 +4,8 @@ import { Hero } from "@/components/Hero/Hero";
 import { MotionLayout } from "@/components/MotionLayout/MotionLayout";
 import { Publications } from "@/components/Publications/Publications";
 
+export const dynamic = "force-static";
+
 export default function Home() {
   return (
     <MotionLayout>

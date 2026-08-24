@@ -3,6 +3,7 @@ import { resolve } from "node:path";
 
 const musicDirectory = resolve(process.cwd(), "public", "music");
 const manifestPath = resolve(musicDirectory, "playlist.json");
+const basePath = (process.env.NEXT_PUBLIC_BASE_PATH ?? "").replace(/\/$/, "");
 
 await mkdir(musicDirectory, { recursive: true });
 
@@ -15,7 +16,7 @@ const files = (await readdir(musicDirectory, { withFileTypes: true }))
 
 const tracks = files.map((filename) => ({
   title: filename.replace(supportedAudio, "").replace(/[-_]+/g, " "),
-  src: `/music/${encodeURIComponent(filename)}`,
+  src: `${basePath}/music/${encodeURIComponent(filename)}`,
 }));
 
 await writeFile(manifestPath, `${JSON.stringify(tracks, null, 2)}\n`, "utf8");

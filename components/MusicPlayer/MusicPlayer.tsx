@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
+import { withBasePath } from "@/lib/paths";
 import styles from "./MusicPlayer.module.css";
 
 type Track = {
@@ -67,7 +68,7 @@ export function MusicPlayer() {
 
   useEffect(() => {
     let active = true;
-    fetch("/music/playlist.json", { cache: "no-store" })
+    fetch(withBasePath("/music/playlist.json"), { cache: "no-store" })
       .then((response) => response.json() as Promise<Track[]>)
       .then((playlist) => {
         if (active) setTracks(playlist);

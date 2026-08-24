@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { createLinearTexture, createWebGLProgram, loadImage } from "@/lib/webgl";
+import { withBasePath } from "@/lib/paths";
 import styles from "./ContactKineticBackground.module.css";
 
 const VERTEX_SHADER = `#version 300 es
@@ -225,8 +226,8 @@ export function ContactKineticBackground() {
     };
 
     Promise.all([
-      loadImage("/images/contact-background-charlee-final.png"),
-      loadImage("/images/contact-displacement-hyper-v2.png"),
+      loadImage(withBasePath("/images/contact-background-charlee-final.png")),
+      loadImage(withBasePath("/images/contact-displacement-hyper-v2.png")),
     ]).then(([image, displacement]) => {
       if (destroyed) return;
       imageWidth = image.naturalWidth;
