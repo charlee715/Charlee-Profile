@@ -146,14 +146,15 @@ export function AwardsAsciiBackground() {
     const rebuildWordmarkMask=()=>{
       const maskCanvas=document.createElement("canvas");maskCanvas.width=columns;maskCanvas.height=rows;
       const maskContext=maskCanvas.getContext("2d");if(!maskContext)return;
-      let wordmarkSize=Math.min(width*.36,height*.17);
+      const mobile=window.matchMedia("(max-width: 767px)").matches;
+      let wordmarkSize=Math.min(width*(mobile?.46:.36),height*(mobile?.28:.17));
       maskContext.font=`700 ${wordmarkSize/cellSize}px "Arial Nova", "Helvetica Neue", sans-serif`;
       const measuredWidth=Math.max(maskContext.measureText("AWA").width,maskContext.measureText("RDS").width)*cellSize;
       if(measuredWidth>width*.88)wordmarkSize*=width*.88/measuredWidth;
       const hostRectangle=host.getBoundingClientRect();
       const awardsList=section.querySelector<HTMLElement>("[data-awards-list]");
       const listRectangle=awardsList?.getBoundingClientRect();
-      const centerY=listRectangle?(listRectangle.top+listRectangle.height/2-hostRectangle.top)/cellSize:rows/2;
+      const centerY=!mobile&&listRectangle?(listRectangle.top+listRectangle.height/2-hostRectangle.top)/cellSize:rows/2;
       const lineGap=wordmarkSize*1.18/cellSize;
       maskContext.font=`700 ${wordmarkSize/cellSize}px "Arial Nova", "Helvetica Neue", sans-serif`;
       maskContext.textAlign="center";maskContext.textBaseline="middle";maskContext.fillStyle="#000";
