@@ -27,6 +27,10 @@
   );
 }
 
+@media (max-width: 767px) {
+  .background { background-position: 72% center; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .canvas { display: none; }
 }
