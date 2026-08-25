@@ -18,6 +18,8 @@ export function MusicPlayer() {
   const audioContextRef = useRef<AudioContext | null>(null);
   const analyserRef = useRef<AnalyserNode | null>(null);
   const continueAfterTrackChangeRef = useRef(false);
+  const playbackRequestedRef = useRef(false);
+  const retryTimeoutRef = useRef<number | null>(null);
   const dragRef = useRef<{
     pointerId: number;
     offsetX: number;
@@ -38,6 +40,11 @@ export function MusicPlayer() {
     const audio = audioRef.current;
     if (!audio) return;
 
+    if (audioContextRef.current?.state === "closed") {
+      audioContextRef.current = null;
+      analyserRef.current = null;
+    }
+
     if (!audioContextRef.current) {
       const audioContext = new AudioContext();
       const analyser = audioContext.createAnalyser();
@@ -55,16 +62,38 @@ export function MusicPlayer() {
     }
   }, []);
 
+  const clearPlaybackRetry = useCallback(() => {
+    if (retryTimeoutRef.current === null) return;
+    window.clearTimeout(retryTimeoutRef.current);
+    retryTimeoutRef.current = null;
+  }, []);
+
   const play = useCallback(async () => {
     const audio = audioRef.current;
     if (!audio || tracks.length === 0) return;
+    playbackRequestedRef.current = true;
     try {
       await connectAnalyser();
       await audio.play();
-    } catch {
+      clearPlaybackRetry();
+    } catch (error) {
+      if (error instanceof DOMException && error.name === "NotAllowedError") {
+        playbackRequestedRef.current = false;
+      }
       setIsPlaying(false);
     }
-  }, [connectAnalyser, tracks.length]);
+  }, [clearPlaybackRetry, connectAnalyser, tracks.length]);
+
+  const schedulePlaybackRetry = useCallback((delay = 1100) => {
+    if (!playbackRequestedRef.current || document.visibilityState !== "visible") return;
+    clearPlaybackRetry();
+    retryTimeoutRef.current = window.setTimeout(() => {
+      retryTimeoutRef.current = null;
+      if (playbackRequestedRef.current && document.visibilityState === "visible") {
+        void play();
+      }
+    }, delay);
+  }, [clearPlaybackRetry, play]);
 
   useEffect(() => {
     let active = true;
@@ -105,6 +134,25 @@ export function MusicPlayer() {
     const timeout = window.setTimeout(() => { void play(); }, 60);
     return () => window.clearTimeout(timeout);
   }, [play, trackIndex]);
+
+  useEffect(() => {
+    const recoverPlayback = () => {
+      if (document.visibilityState !== "visible" || !playbackRequestedRef.current) return;
+      const audioContext = audioContextRef.current;
+      if (audioContext?.state === "suspended") void audioContext.resume();
+      if (audioRef.current?.paused) schedulePlaybackRetry(120);
+    };
+
+    document.addEventListener("visibilitychange", recoverPlayback);
+    window.addEventListener("pageshow", recoverPlayback);
+    window.addEventListener("focus", recoverPlayback);
+    return () => {
+      document.removeEventListener("visibilitychange", recoverPlayback);
+      window.removeEventListener("pageshow", recoverPlayback);
+      window.removeEventListener("focus", recoverPlayback);
+      clearPlaybackRetry();
+    };
+  }, [clearPlaybackRetry, schedulePlaybackRetry]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -211,18 +259,26 @@ export function MusicPlayer() {
   }, [isPlaying]);
 
   useEffect(() => () => {
+    clearPlaybackRetry();
     void audioContextRef.current?.close();
-  }, []);
+  }, [clearPlaybackRetry]);
 
   const currentTrack = tracks[trackIndex];
   const togglePlayback = () => {
     const audio = audioRef.current;
     if (!audio || tracks.length === 0) return;
-    if (audio.paused) void play();
-    else audio.pause();
+    if (audio.paused) {
+      playbackRequestedRef.current = true;
+      void play();
+    } else {
+      playbackRequestedRef.current = false;
+      clearPlaybackRetry();
+      audio.pause();
+    }
   };
 
   const handleEnded = () => {
+    playbackRequestedRef.current = true;
     if (tracks.length > 1) {
       continueAfterTrackChangeRef.current = true;
       setTrackIndex((index) => (index + 1) % tracks.length);
@@ -308,9 +364,24 @@ export function MusicPlayer() {
         <audio
           ref={audioRef}
           src={currentTrack?.src}
-          preload="metadata"
-          onPlay={() => setIsPlaying(true)}
+          preload="auto"
+          onPlaying={() => {
+            clearPlaybackRetry();
+            setIsPlaying(true);
+          }}
           onPause={() => setIsPlaying(false)}
+          onWaiting={() => schedulePlaybackRetry()}
+          onStalled={() => schedulePlaybackRetry()}
+          onCanPlay={() => {
+            if (playbackRequestedRef.current && audioRef.current?.paused) {
+              schedulePlaybackRetry(80);
+            }
+          }}
+          onError={() => {
+            playbackRequestedRef.current = false;
+            clearPlaybackRetry();
+            setIsPlaying(false);
+          }}
           onEnded={handleEnded}
         />
         <canvas className={styles.waveform} ref={canvasRef} aria-hidden="true" />
