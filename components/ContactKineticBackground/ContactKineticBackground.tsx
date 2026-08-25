@@ -19,6 +19,7 @@ uniform sampler2D uDisplacement;
 uniform sampler2D uBrand;
 uniform vec2 uResolution;
 uniform vec2 uImageSize;
+uniform vec2 uImageFocus;
 uniform vec2 uPointer;
 uniform vec2 uDisplacementScale;
 
@@ -26,9 +27,9 @@ vec2 coverUv(vec2 uv){
   float viewportAspect=uResolution.x/uResolution.y;
   float imageAspect=uImageSize.x/uImageSize.y;
   if(viewportAspect>imageAspect){
-    uv.y=(uv.y-.5)*(imageAspect/viewportAspect)+.5;
+    uv.y=(uv.y-.5)*(imageAspect/viewportAspect)+uImageFocus.y;
   }else{
-    uv.x=(uv.x-.5)*(viewportAspect/imageAspect)+.5;
+    uv.x=(uv.x-.5)*(viewportAspect/imageAspect)+uImageFocus.x;
   }
   return uv;
 }
@@ -127,6 +128,7 @@ export function ContactKineticBackground() {
     let previousTime = performance.now();
     let imageWidth = 1;
     let imageHeight = 1;
+    let imageFocusX = 0.5;
     let targetX = 0.5;
     let targetY = 0.5;
     let followerX = 0.5;
@@ -142,6 +144,7 @@ export function ContactKineticBackground() {
     const brandLocation = location("uBrand");
     const resolutionLocation = location("uResolution");
     const imageSizeLocation = location("uImageSize");
+    const imageFocusLocation = location("uImageFocus");
     const pointerLocation = location("uPointer");
     const scaleLocation = location("uDisplacementScale");
 
@@ -150,6 +153,7 @@ export function ContactKineticBackground() {
       const ratio = Math.min(window.devicePixelRatio || 1, 1.5);
       canvas.width = Math.max(1, Math.round(rectangle.width * ratio));
       canvas.height = Math.max(1, Math.round(rectangle.height * ratio));
+      imageFocusX = rectangle.width <= 767 ? 0.72 : 0.5;
       gl.viewport(0, 0, canvas.width, canvas.height);
     };
 
@@ -183,6 +187,7 @@ export function ContactKineticBackground() {
       gl.uniform1i(brandLocation, 2);
       gl.uniform2f(resolutionLocation, canvas.width, canvas.height);
       gl.uniform2f(imageSizeLocation, imageWidth, imageHeight);
+      gl.uniform2f(imageFocusLocation, imageFocusX, 0.5);
       gl.uniform2f(pointerLocation, followerX, followerY);
       gl.uniform2f(scaleLocation, scaleX, scaleY);
       gl.drawArrays(gl.TRIANGLES, 0, 3);
